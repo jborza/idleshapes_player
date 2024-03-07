@@ -72,6 +72,7 @@ namespace autoclicker
         private void button1_Click(object sender, EventArgs e)
         {
             //click();
+            timerClick.Interval = int.Parse(textTime.Text);
             timerClick.Start();
         }
 
@@ -79,5 +80,6 @@ namespace autoclicker
         {
             timerClick.Stop();
         }
+
     }
 }
