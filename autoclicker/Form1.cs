@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MovablePython;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,11 @@ namespace autoclicker
         public Form1()
         {
             InitializeComponent();
+            Hotkey hk = new Hotkey();
+            hk.KeyCode = Keys.Oemtilde;
+            //hk.KeyCode = Keys.A;
+            hk.Pressed += Hk_Pressed;
+            hk.Register(this);
         }
 
         private void timerClick_Tick(object sender, EventArgs e)
@@ -23,6 +29,8 @@ namespace autoclicker
             // click
             click();
         }
+
+        bool started = false;
 
 
         //mouse event constants
@@ -69,17 +77,50 @@ namespace autoclicker
             SendInput(1, ref i, Marshal.SizeOf(i));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonStart_Click(object sender, EventArgs e)
         {
-            //click();
-            timerClick.Interval = int.Parse(textTime.Text);
-            timerClick.Start();
+            start();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void start()
         {
+            started=true;
+            timerClick.Interval = int.Parse(textTime.Text);
+            timerClick.Start();
+
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            stop();
+        }
+        
+        private void stop()
+        {
+            started = false;
             timerClick.Stop();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Hk_Pressed(object sender, HandledEventArgs e)
+        {
+            if (started)
+            {
+                stop();
+            }
+            else
+            {
+                start();
+            }
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        { 
+            MessageBox.Show(e.KeyCode+"");
+        }
     }
 }
