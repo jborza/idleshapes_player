@@ -42,7 +42,7 @@ namespace autoclicker
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(0, 0);
+            this.buttonStart.Location = new System.Drawing.Point(8, 12);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 0;
@@ -52,7 +52,7 @@ namespace autoclicker
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(0, 41);
+            this.buttonStop.Location = new System.Drawing.Point(12, 50);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(75, 23);
             this.buttonStop.TabIndex = 1;
@@ -93,7 +93,7 @@ namespace autoclicker
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(139, -1);
+            this.button3.Location = new System.Drawing.Point(139, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 5;
@@ -113,7 +113,7 @@ namespace autoclicker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 430);
+            this.ClientSize = new System.Drawing.Size(379, 191);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label2);
