@@ -49,80 +49,17 @@ namespace autoclicker
             {
                 moveMouse();
             }
-            if (checkBoxIdleShapes.Checked && tick % 20 == 0)
+            if (checkBoxIdleShapes.Checked && tick % 40 == 0)
             {
                 //move to one of the coords
                 const int x = 0;
                 const int y = 1;
-                //1 coord : 680
-                //2 coords: 618,759
-                //3 coords: 545, 690, 832
-                var coords_1 = new int[1] { 680 };
-                var coords_2 = new int[2] { 618, 759 };
-                var coords_3 = new int[3] { 545, 690, 832 };
+
                 var clickY = new int[4] { 532, 571, 615, 487 };
                 var coordsToClick = new List<int[]>();
                 int coords = 1;
-                if (coords == 1)
-                {
-                    coordsToClick = new List<int[]>
-                    {
-                        new int[2] { coords_1[0], clickY[0] },
-                        new int[2] { coords_1[0], clickY[1] },
-                        new int[2] { coords_1[0], clickY[2] },
-                        new int[2] { coords_1[0], clickY[3] },
+                coordsToClick = makeCoords(coords);
 
-                    };
-                }
-                else if (coords == 2)
-                {
-                    coordsToClick = new List<int[]>
-                    {
-                        new int[2] { coords_2[0], clickY[0] },
-                        new int[2] { coords_2[0], clickY[1] },
-                        new int[2] { coords_2[0], clickY[2] },
-                        new int[2] { coords_2[0], clickY[3] },
-                        new int[2] { coords_2[1], clickY[0] },
-                        new int[2] { coords_2[1], clickY[1] },
-                        new int[2] { coords_2[1], clickY[2] },
-                        new int[2] { coords_2[1], clickY[3]}
-                    };
-                }
-                else if (coords == 3)
-                {
-                    coordsToClick = new List<int[]>
-                    { 
-                        new int[2] { coords_3[0], clickY[0] },
-                        new int[2] { coords_3[0], clickY[1] },
-                        new int[2] { coords_3[0], clickY[2] },
-                        new int[2] { coords_3[0], clickY[3] },
-                        new int[2] { coords_3[1], clickY[0] },
-                        new int[2] { coords_3[1], clickY[1] },
-                        new int[2] { coords_3[1], clickY[2] },
-                        new int[2] { coords_3[1], clickY[3] },
-                        new int[2] { coords_3[2], clickY[0] },
-                        new int[2] { coords_3[2], clickY[1] },
-                        new int[2] { coords_3[2], clickY[2] },
-                        new int[2] { coords_3[2], clickY[3] }
-                    };
-                }
-                else //4 and more
-                {
-                    //TODO
-                    //new int[2] { coords_3[0], clickY[0] },
-                    //new int[2] { coords_3[0], clickY[1] },
-                    //new int[2] { coords_3[0], clickY[2] },
-                    //new int[2] { coords_3[0], clickY[3] },
-                    //new int[2] { coords_3[1], clickY[0] },
-                    //new int[2] { coords_3[1], clickY[1] },
-                    //new int[2] { coords_3[1], clickY[2] },
-                    //new int[2] { coords_3[1], clickY[3]},
-                    //new int[2] { coords_3[2], clickY[0] },
-                    //new int[2] { coords_3[2], clickY[1] },
-                    //new int[2] { coords_3[2], clickY[2] },
-                    //new int[2] { coords_3[2], clickY[3]},
-                }
-                
                 var oldPosition = Cursor.Position;
                 var pos = coordsToClick[idleShapesTick % coordsToClick.Count];
                 Cursor.Position = new System.Drawing.Point(pos[x], pos[y]);
@@ -132,7 +69,31 @@ namespace autoclicker
             }
         }
 
+        private List<int[]> makeCoords(int coordCount)
+        {
+            //var coords_1 = new int[1] { 680 };
+            //var coords_2 = new int[2] { 618, 759 };
+            //var coords_3 = new int[3] { 545, 690, 832 };
+            //var coords_4 = new int[4] { 478, 69, 758, 902 };
+            var clickY = new int[4] { 532, 571, 615, 487 };
 
+            var coords = new List<int[]> { null,
+                new int[1] { 680 },
+                new int[2] { 618, 759 },
+                new int[3] { 545, 690, 832 },
+                new int[4] { 478, 69, 758, 902 } };
+
+            var myCoords = coords[coordCount];
+            var coordsToClick = new List<int[]>();
+            for (int i = 0; i < coordCount; i++)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    coordsToClick.Add(new int[2] { myCoords[i], clickY[y] });
+                }
+            }
+            return coordsToClick;
+        }
 
         private void moveMouse()
         {

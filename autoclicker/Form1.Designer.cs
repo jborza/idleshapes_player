@@ -78,7 +78,7 @@ namespace autoclicker
             this.textTime.Name = "textTime";
             this.textTime.Size = new System.Drawing.Size(148, 26);
             this.textTime.TabIndex = 2;
-            this.textTime.Text = "20";
+            this.textTime.Text = "10";
             // 
             // label1
             // 
