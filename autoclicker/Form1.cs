@@ -12,6 +12,7 @@ namespace autoclicker
     {
         private Random random;
         int tick = 0;
+        int displayHeight;
 
         public Form1()
         {
@@ -26,6 +27,7 @@ namespace autoclicker
             hkCapture.KeyCode = Keys.D1;
             hkCapture.Pressed += HkCapture_Pressed;
             hkCapture.Register(this);
+            displayHeight = Screen.PrimaryScreen.Bounds.Height;
         }
 
         private void HkCapture_Pressed(object sender, HandledEventArgs e)
@@ -57,8 +59,8 @@ namespace autoclicker
 
                 var clickY = new int[4] { 532, 571, 615, 487 };
                 var coordsToClick = new List<int[]>();
-                int coords = 1;
-                coordsToClick = makeCoords(coords);
+                int shapes = (int)nudShapes.Value;
+                coordsToClick = makeCoords(shapes);
 
                 var oldPosition = Cursor.Position;
                 var pos = coordsToClick[idleShapesTick % coordsToClick.Count];
@@ -98,9 +100,13 @@ namespace autoclicker
         private void moveMouse()
         {
             const int MOVEMENT = 200;
-            Cursor.Position = new System.Drawing.Point(
-                Cursor.Position.X + random.Next(-MOVEMENT, MOVEMENT),
-                Cursor.Position.Y + random.Next(-MOVEMENT, MOVEMENT));
+            int x = Cursor.Position.X + random.Next(-MOVEMENT, MOVEMENT);
+            int y = Cursor.Position.Y + random.Next(-MOVEMENT, MOVEMENT);
+            if (y > displayHeight - 20)
+            {
+                y = displayHeight - 20;
+            }
+            Cursor.Position = new System.Drawing.Point(x,y);
         }
 
         bool started = false;

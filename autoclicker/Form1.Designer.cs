@@ -30,6 +30,7 @@ namespace autoclicker
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Label label3;
             this.buttonStart = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
             this.timerClick = new System.Windows.Forms.Timer(this.components);
@@ -42,6 +43,9 @@ namespace autoclicker
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.textBoxCoords = new System.Windows.Forms.TextBox();
             this.checkBoxIdleShapes = new System.Windows.Forms.CheckBox();
+            this.nudShapes = new System.Windows.Forms.NumericUpDown();
+            label3 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.nudShapes)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonStart
@@ -159,11 +163,34 @@ namespace autoclicker
             this.checkBoxIdleShapes.Text = "play idle shapes";
             this.checkBoxIdleShapes.UseVisualStyleBackColor = true;
             // 
+            // nudShapes
+            // 
+            this.nudShapes.Location = new System.Drawing.Point(384, 67);
+            this.nudShapes.Name = "nudShapes";
+            this.nudShapes.Size = new System.Drawing.Size(120, 26);
+            this.nudShapes.TabIndex = 11;
+            this.nudShapes.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(314, 69);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(64, 20);
+            label3.TabIndex = 12;
+            label3.Text = "Shapes";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 544);
+            this.Controls.Add(label3);
+            this.Controls.Add(this.nudShapes);
             this.Controls.Add(this.checkBoxIdleShapes);
             this.Controls.Add(this.textBoxCoords);
             this.Controls.Add(this.checkBox2);
@@ -178,6 +205,7 @@ namespace autoclicker
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "autoclicker";
+            ((System.ComponentModel.ISupportInitialize)(this.nudShapes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,6 +225,7 @@ namespace autoclicker
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TextBox textBoxCoords;
         private System.Windows.Forms.CheckBox checkBoxIdleShapes;
+        private System.Windows.Forms.NumericUpDown nudShapes;
     }
 }
 
