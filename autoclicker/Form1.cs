@@ -2,18 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace autoclicker
 {
     public partial class Form1 : Form
     {
+        private Random random;
+        int tick = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -22,15 +21,130 @@ namespace autoclicker
             //hk.KeyCode = Keys.A;
             hk.Pressed += Hk_Pressed;
             hk.Register(this);
+            random = new Random();
+            Hotkey hkCapture = new Hotkey();
+            hkCapture.KeyCode = Keys.D1;
+            hkCapture.Pressed += HkCapture_Pressed;
+            hkCapture.Register(this);
+        }
+
+        private void HkCapture_Pressed(object sender, HandledEventArgs e)
+        {
+            string s = "";
+            s += Cursor.Position.X + ",";
+            s += Cursor.Position.Y;
+            s += Environment.NewLine;
+            textBoxCoords.Text += s;
         }
 
         private void timerClick_Tick(object sender, EventArgs e)
         {
+            tick++;
             // click
-            click();
+            if (checkBox2.Checked)
+            {
+                click();
+            }
+            if (doMovement)
+            {
+                moveMouse();
+            }
+            if (checkBoxIdleShapes.Checked && tick % 20 == 0)
+            {
+                //move to one of the coords
+                const int x = 0;
+                const int y = 1;
+                //1 coord : 680
+                //2 coords: 618,759
+                //3 coords: 545, 690, 832
+                var coords_1 = new int[1] { 680 };
+                var coords_2 = new int[2] { 618, 759 };
+                var coords_3 = new int[3] { 545, 690, 832 };
+                var clickY = new int[4] { 532, 571, 615, 487 };
+                var coordsToClick = new List<int[]>();
+                int coords = 1;
+                if (coords == 1)
+                {
+                    coordsToClick = new List<int[]>
+                    {
+                        new int[2] { coords_1[0], clickY[0] },
+                        new int[2] { coords_1[0], clickY[1] },
+                        new int[2] { coords_1[0], clickY[2] },
+                        new int[2] { coords_1[0], clickY[3] },
+
+                    };
+                }
+                else if (coords == 2)
+                {
+                    coordsToClick = new List<int[]>
+                    {
+                        new int[2] { coords_2[0], clickY[0] },
+                        new int[2] { coords_2[0], clickY[1] },
+                        new int[2] { coords_2[0], clickY[2] },
+                        new int[2] { coords_2[0], clickY[3] },
+                        new int[2] { coords_2[1], clickY[0] },
+                        new int[2] { coords_2[1], clickY[1] },
+                        new int[2] { coords_2[1], clickY[2] },
+                        new int[2] { coords_2[1], clickY[3]}
+                    };
+                }
+                else if (coords == 3)
+                {
+                    coordsToClick = new List<int[]>
+                    { 
+                        new int[2] { coords_3[0], clickY[0] },
+                        new int[2] { coords_3[0], clickY[1] },
+                        new int[2] { coords_3[0], clickY[2] },
+                        new int[2] { coords_3[0], clickY[3] },
+                        new int[2] { coords_3[1], clickY[0] },
+                        new int[2] { coords_3[1], clickY[1] },
+                        new int[2] { coords_3[1], clickY[2] },
+                        new int[2] { coords_3[1], clickY[3] },
+                        new int[2] { coords_3[2], clickY[0] },
+                        new int[2] { coords_3[2], clickY[1] },
+                        new int[2] { coords_3[2], clickY[2] },
+                        new int[2] { coords_3[2], clickY[3] }
+                    };
+                }
+                else //4 and more
+                {
+                    //TODO
+                    //new int[2] { coords_3[0], clickY[0] },
+                    //new int[2] { coords_3[0], clickY[1] },
+                    //new int[2] { coords_3[0], clickY[2] },
+                    //new int[2] { coords_3[0], clickY[3] },
+                    //new int[2] { coords_3[1], clickY[0] },
+                    //new int[2] { coords_3[1], clickY[1] },
+                    //new int[2] { coords_3[1], clickY[2] },
+                    //new int[2] { coords_3[1], clickY[3]},
+                    //new int[2] { coords_3[2], clickY[0] },
+                    //new int[2] { coords_3[2], clickY[1] },
+                    //new int[2] { coords_3[2], clickY[2] },
+                    //new int[2] { coords_3[2], clickY[3]},
+                }
+                
+                var oldPosition = Cursor.Position;
+                var pos = coordsToClick[idleShapesTick % coordsToClick.Count];
+                Cursor.Position = new System.Drawing.Point(pos[x], pos[y]);
+                click();
+                //Cursor.Position = oldPosition;
+                idleShapesTick++;
+            }
+        }
+
+
+
+        private void moveMouse()
+        {
+            const int MOVEMENT = 200;
+            Cursor.Position = new System.Drawing.Point(
+                Cursor.Position.X + random.Next(-MOVEMENT, MOVEMENT),
+                Cursor.Position.Y + random.Next(-MOVEMENT, MOVEMENT));
         }
 
         bool started = false;
+        private bool doMovement = false;
+        private int idleShapesTick = 0;
 
 
         //mouse event constants
@@ -69,7 +183,7 @@ namespace autoclicker
             i.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
             i.mi.dwExtraInfo = IntPtr.Zero;
             i.mi.mouseData = 0;
-            i.mi.time = 0;
+            i.mi.time = 0; //we want the system to provide its own timestamp
             //send the input 
             SendInput(1, ref i, Marshal.SizeOf(i));
             //set the INPUT for mouse up and send it
@@ -84,17 +198,16 @@ namespace autoclicker
 
         private void start()
         {
-            started=true;
+            started = true;
             timerClick.Interval = int.Parse(textTime.Text);
             timerClick.Start();
-
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
             stop();
         }
-        
+
         private void stop()
         {
             started = false;
@@ -103,7 +216,7 @@ namespace autoclicker
 
         private void button3_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void Hk_Pressed(object sender, HandledEventArgs e)
@@ -119,8 +232,13 @@ namespace autoclicker
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
-        { 
-            MessageBox.Show(e.KeyCode+"");
+        {
+            MessageBox.Show(e.KeyCode + "");
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            doMovement = checkBox1.Checked;
         }
     }
 }
