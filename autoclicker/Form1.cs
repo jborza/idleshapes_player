@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace autoclicker
@@ -13,6 +14,7 @@ namespace autoclicker
         private Random random;
         int tick = 0;
         int displayHeight;
+        int displayWidth;
 
         public Form1()
         {
@@ -28,6 +30,7 @@ namespace autoclicker
             hkCapture.Pressed += HkCapture_Pressed;
             hkCapture.Register(this);
             displayHeight = Screen.PrimaryScreen.Bounds.Height;
+            displayWidth = Screen.PrimaryScreen.Bounds.Width;
         }
 
         private void HkCapture_Pressed(object sender, HandledEventArgs e)
@@ -47,11 +50,8 @@ namespace autoclicker
             {
                 click();
             }
-            if (doMovement)
-            {
-                moveMouse();
-            }
-            if (checkBoxIdleShapes.Checked && tick % 40 == 0)
+
+            if (checkBoxIdleShapes.Checked && tick % 80 == 0)
             {
                 //move to one of the coords
                 const int x = 0;
@@ -64,8 +64,10 @@ namespace autoclicker
 
                 var oldPosition = Cursor.Position;
                 var pos = coordsToClick[idleShapesTick % coordsToClick.Count];
-                Cursor.Position = new System.Drawing.Point(pos[x], pos[y]);
+                Cursor.Position = new Point(pos[x], pos[y]);
                 click();
+                newCursorPosition = new Point(10, 10);
+                goingUp = false;
                 //Cursor.Position = oldPosition;
                 idleShapesTick++;
             }
@@ -97,22 +99,58 @@ namespace autoclicker
             return coordsToClick;
         }
 
-        private void moveMouse()
+        private void MoveMouse()
         {
-            const int MOVEMENT = 200;
-            int x = Cursor.Position.X + random.Next(-MOVEMENT, MOVEMENT);
-            int y = Cursor.Position.Y + random.Next(-MOVEMENT, MOVEMENT);
-            if (y > displayHeight - 20)
+            if (newCursorPosition != null)
             {
-                y = displayHeight - 20;
+                Cursor.Position = newCursorPosition.Value;
+                newCursorPosition = null;
             }
-            Cursor.Position = new System.Drawing.Point(x,y);
+            int movementYChange = 2;
+            int movementXChange = 2;
+            var position = Cursor.Position;
+            if (goingUp && position.Y < 10)
+            {
+                goingUp = false;
+                if (Cursor.Position.X > displayWidth - 10)
+                {
+                    Cursor.Position = new Point(0, Cursor.Position.Y);
+                }
+                //move right
+                Cursor.Position = new Point(
+                    Cursor.Position.X + movementXChange,
+                    Cursor.Position.Y);
+                return;
+            }
+            if (goingUp == false && position.Y > displayHeight - 20)
+            {
+                goingUp = true;
+                //move right
+                Cursor.Position = new Point(
+                    Cursor.Position.X + movementXChange,
+                    Cursor.Position.Y);
+                return;
+            }
+            if (goingUp)
+            {
+                Cursor.Position = new Point(
+                    Cursor.Position.X,
+                    Cursor.Position.Y - movementYChange);
+            }
+            else //going down
+            {
+                Cursor.Position = new Point(
+                   Cursor.Position.X,
+                   Cursor.Position.Y + movementYChange);
+            }
         }
 
         bool started = false;
         private bool doMovement = false;
         private int idleShapesTick = 0;
-
+        private bool goingUp;
+        private Point? newCursorPosition;
+        private bool abortWork = false;
 
         //mouse event constants
         const int MOUSEEVENTF_LEFTDOWN = 2;
@@ -168,6 +206,20 @@ namespace autoclicker
             started = true;
             timerClick.Interval = int.Parse(textTime.Text);
             timerClick.Start();
+            //start the thing
+            while (true)
+            {
+                if (doMovement)
+                {
+                    MoveMouse();
+                    if (abortWork)
+                    {
+                        abortWork = false;
+                        return;
+                    }
+                }
+            }
+            //timerMove.Start();
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -179,6 +231,8 @@ namespace autoclicker
         {
             started = false;
             timerClick.Stop();
+            abortWork = true;
+            //timerMove.Stop();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -205,7 +259,15 @@ namespace autoclicker
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            doMovement = checkBox1.Checked;
+            doMovement = cbMovement.Checked;
+        }
+
+        private void timerMove_Tick(object sender, EventArgs e)
+        {
+            if (doMovement)
+            {
+                MoveMouse();
+            }
         }
     }
 }

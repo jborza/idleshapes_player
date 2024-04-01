@@ -39,11 +39,12 @@ namespace autoclicker
             this.label2 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbMovement = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.textBoxCoords = new System.Windows.Forms.TextBox();
             this.checkBoxIdleShapes = new System.Windows.Forms.CheckBox();
             this.nudShapes = new System.Windows.Forms.NumericUpDown();
+            this.timerMove = new System.Windows.Forms.Timer(this.components);
             label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudShapes)).BeginInit();
             this.SuspendLayout();
@@ -124,16 +125,16 @@ namespace autoclicker
             this.textBox1.TabIndex = 6;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
-            // checkBox1
+            // cbMovement
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(18, 133);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(193, 24);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "Move mouse randomly";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbMovement.AutoSize = true;
+            this.cbMovement.Location = new System.Drawing.Point(18, 122);
+            this.cbMovement.Name = "cbMovement";
+            this.cbMovement.Size = new System.Drawing.Size(258, 24);
+            this.cbMovement.TabIndex = 7;
+            this.cbMovement.Text = "Move mouse around the screen";
+            this.cbMovement.UseVisualStyleBackColor = true;
+            this.cbMovement.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // checkBox2
             // 
@@ -184,6 +185,11 @@ namespace autoclicker
             label3.TabIndex = 12;
             label3.Text = "Shapes";
             // 
+            // timerMove
+            // 
+            this.timerMove.Interval = 1;
+            this.timerMove.Tick += new System.EventHandler(this.timerMove_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -194,7 +200,7 @@ namespace autoclicker
             this.Controls.Add(this.checkBoxIdleShapes);
             this.Controls.Add(this.textBoxCoords);
             this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.cbMovement);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label2);
@@ -221,11 +227,12 @@ namespace autoclicker
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbMovement;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TextBox textBoxCoords;
         private System.Windows.Forms.CheckBox checkBoxIdleShapes;
         private System.Windows.Forms.NumericUpDown nudShapes;
+        private System.Windows.Forms.Timer timerMove;
     }
 }
 
